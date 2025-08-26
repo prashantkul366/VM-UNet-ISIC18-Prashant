@@ -83,6 +83,11 @@ python train_synapse.py  # Train and test VM-UNet on the Synapse dataset.
 ## 4. Obtain the outputs
 - After trianing, you could obtain the results in './results/'
 
-## 5. Acknowledgments
+## 5. Trained VM-UNet Checkpoint
+
+- You can also obtain our trained VM-UNet on ISIC17, ISIC18 and Synapse from [Baidu Netdisk](https://pan.baidu.com/s/1lygUOFo6fMF_wS_dskwpBQ?pwd=5z00).
+
+## 6. Acknowledgments
 
 - We thank the authors of [VMamba](https://github.com/MzeroMiko/VMamba) and [Swin-UNet](https://github.com/HuCaoFighting/Swin-Unet) for their open-source codes.
+
