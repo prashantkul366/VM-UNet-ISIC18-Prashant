@@ -21,7 +21,7 @@ class setting_config:
 
     datasets = 'isic18' 
     if datasets == 'isic18':
-        data_path = './data/isic2018/'
+        data_path = '/content/drive/MyDrive/Amit-Paper3/UNeXt-pytorch/inputs/isic2'
     elif datasets == 'isic17':
         data_path = './data/isic2017/'
     else:
