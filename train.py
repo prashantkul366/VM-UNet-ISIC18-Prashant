@@ -149,7 +149,7 @@ def main(config):
     for epoch in range(start_epoch, config.epochs + 1):
 
         torch.cuda.empty_cache()
-
+        print(f'Epoch {epoch}/{config.epochs}:')
         step = train_one_epoch(
             train_loader,
             model,
