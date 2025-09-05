@@ -80,7 +80,7 @@ def main(config):
             drop_path_rate=model_cfg['drop_path_rate'],
             load_ckpt_path=model_cfg['load_ckpt_path'],
         )
-        model.load_from()
+        # model.load_from()
         
         if model_cfg.get('load_ckpt_path') and os.path.exists(model_cfg['load_ckpt_path']):
             model.load_from()
