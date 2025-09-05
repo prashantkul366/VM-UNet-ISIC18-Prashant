@@ -82,6 +82,11 @@ def main(config):
         )
         model.load_from()
         
+        if model_cfg.get('load_ckpt_path') and os.path.exists(model_cfg['load_ckpt_path']):
+            model.load_from()
+        else:
+            print('[VMUNet] No pretrained checkpoint provided; training from scratch.')
+
     else: raise Exception('network in not right!')
     model = model.cuda()
 
