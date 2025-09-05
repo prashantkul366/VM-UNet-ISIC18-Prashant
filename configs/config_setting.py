@@ -42,7 +42,7 @@ class setting_config:
     rank = None
     amp = False
     gpu_id = '0'
-    batch_size = 32
+    batch_size = 8
     epochs = 300
 
     work_dir = 'results/' + network + '_' + datasets + '_' + datetime.now().strftime('%A_%d_%B_%Y_%Hh_%Mm_%Ss') + '/'
@@ -52,8 +52,12 @@ class setting_config:
     save_interval = 100
     threshold = 0.5
     only_test_and_save_figs = False
-    best_ckpt_path = 'PATH_TO_YOUR_BEST_CKPT'
-    img_save_path = 'PATH_TO_SAVE_IMAGES'
+    # best_ckpt_path = 'PATH_TO_YOUR_BEST_CKPT'
+    # img_save_path = 'PATH_TO_SAVE_IMAGES'
+    # for test-only runs (set only_test_and_save_figs = True)
+    best_ckpt_path = '/content/drive/MyDrive/Prashant/VM-UNet-ISIC18-Prashant/results/vmunet_isic18_/checkpoints/best.pth'
+    img_save_path  = '/content/drive/MyDrive/Prashant/VM-UNet-ISIC18-Prashant/inference/vmunet_isic18/'
+
 
     train_transformer = transforms.Compose([
         myNormalize(datasets, train=True),
