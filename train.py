@@ -24,6 +24,8 @@ def main(config):
     log_dir = os.path.join(config.work_dir, 'log')
     checkpoint_dir = os.path.join(config.work_dir, 'checkpoints')
     resume_model = os.path.join(checkpoint_dir, 'latest.pth')
+    best_dice  = checkpoint.get('best_dice', best_dice)
+    best_epoch = checkpoint.get('best_epoch', best_epoch)
     outputs = os.path.join(config.work_dir, 'outputs')
     if not os.path.exists(checkpoint_dir):
         os.makedirs(checkpoint_dir)
@@ -100,6 +102,7 @@ def main(config):
     criterion = config.criterion
     optimizer = get_optimizer(config, model)
     scheduler = get_scheduler(config, optimizer)
+    start_epoch = 1 
 
     # --- Dice-based tracking & early stopping ---
     best_dice = 0.0        
@@ -243,10 +246,15 @@ def main(config):
                 logger,
                 config,
             )
+        # os.rename(
+        #     os.path.join(checkpoint_dir, 'best.pth'),
+        #     os.path.join(checkpoint_dir, f'best-epoch{min_epoch}-loss{min_loss:.4f}.pth')
+        # ) 
         os.rename(
             os.path.join(checkpoint_dir, 'best.pth'),
-            os.path.join(checkpoint_dir, f'best-epoch{min_epoch}-loss{min_loss:.4f}.pth')
-        )      
+            os.path.join(checkpoint_dir, f'best-epoch{best_epoch}-dice{best_dice:.4f}.pth')
+        )
+     
 
 
 if __name__ == '__main__':
