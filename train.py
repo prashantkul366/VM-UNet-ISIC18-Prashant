@@ -101,14 +101,16 @@ def main(config):
     optimizer = get_optimizer(config, model)
     scheduler = get_scheduler(config, optimizer)
 
-
-
+    # --- Dice-based tracking & early stopping ---
+    best_dice = 0.0        
+    best_epoch = 0           
+    dice_patience = getattr(config, 'early_stopping_patience', 30)  # fallback to 30 if not in config  
 
 
     print('#----------Set other params----------#')
-    min_loss = 999
-    start_epoch = 1
+    min_loss = 999           # keep if you still want to log loss; not used for early stop now
     min_epoch = 1
+
 
     if config.only_test_and_save_figs:
         checkpoint = torch.load(config.best_ckpt_path, map_location=torch.device('cpu'))
@@ -163,30 +165,72 @@ def main(config):
             writer
         )
 
-        loss = val_one_epoch(
-                val_loader,
-                model,
-                criterion,
-                epoch,
-                logger,
-                config
-            )
+        # loss = val_one_epoch(
+        #         val_loader,
+        #         model,
+        #         criterion,
+        #         epoch,
+        #         logger,
+        #         config
+        #     )
 
-        if loss < min_loss:
+        val_loss, val_dice = val_one_epoch(
+                    val_loader,
+                    model,
+                    criterion,
+                    epoch,
+                    logger,
+                    config
+                )
+
+
+        # if loss < min_loss:
+        #     torch.save(model.state_dict(), os.path.join(checkpoint_dir, 'best.pth'))
+        #     min_loss = loss
+        #     min_epoch = epoch
+
+        # --- Save best based on Val Dice (higher is better) ---
+        if val_dice > best_dice:
+            logger.info(f"\tSaving best model: Dice {best_dice:.4f} -> {val_dice:.4f}")
+            best_dice  = val_dice
+            best_epoch = epoch
             torch.save(model.state_dict(), os.path.join(checkpoint_dir, 'best.pth'))
-            min_loss = loss
-            min_epoch = epoch
+        else:
+            logger.info(f"\tDice did not improve: curr {val_dice:.4f}, best {best_dice:.4f} @ epoch {best_epoch}")
+
+
+        # torch.save(
+        #     {
+        #         'epoch': epoch,
+        #         'min_loss': min_loss,
+        #         'min_epoch': min_epoch,
+        #         'loss': loss,
+        #         'model_state_dict': model.state_dict(),
+        #         'optimizer_state_dict': optimizer.state_dict(),
+        #         'scheduler_state_dict': scheduler.state_dict(),
+        #     }, os.path.join(checkpoint_dir, 'latest.pth')) 
 
         torch.save(
-            {
-                'epoch': epoch,
-                'min_loss': min_loss,
-                'min_epoch': min_epoch,
-                'loss': loss,
-                'model_state_dict': model.state_dict(),
-                'optimizer_state_dict': optimizer.state_dict(),
-                'scheduler_state_dict': scheduler.state_dict(),
-            }, os.path.join(checkpoint_dir, 'latest.pth')) 
+                {
+                    'epoch': epoch,
+                    'min_loss': min_loss,
+                    'min_epoch': min_epoch,
+                    'loss': val_loss,                       # store the current val loss
+                    'best_dice': best_dice,                 # NEW: store best Dice so far
+                    'best_epoch': best_epoch,               # NEW: store epoch of best Dice
+                    'model_state_dict': model.state_dict(),
+                    'optimizer_state_dict': optimizer.state_dict(),
+                    'scheduler_state_dict': scheduler.state_dict(),
+                },
+                os.path.join(checkpoint_dir, 'latest.pth')
+            )
+
+        # --- Early stopping on Dice ---
+        early_stopping_count = epoch - best_epoch
+        logger.info(f"\tEarly stopping patience: {early_stopping_count}/{dice_patience}")
+        if early_stopping_count >= dice_patience:
+            logger.info('\tEarly stopping triggered (Dice)!')
+            break
 
     if os.path.exists(os.path.join(checkpoint_dir, 'best.pth')):
         print('#----------Testing----------#')

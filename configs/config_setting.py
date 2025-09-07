@@ -43,7 +43,9 @@ class setting_config:
     amp = False
     gpu_id = '0'
     batch_size = 8
-    epochs = 300
+    epochs = 1000
+    early_stopping_patience = 30   # stop if no improvement for 30 epochs
+
 
     work_dir = 'results/' + network + '_' + datasets + '_' + datetime.now().strftime('%A_%d_%B_%Y_%Hh_%Mm_%Ss') + '/'
 
