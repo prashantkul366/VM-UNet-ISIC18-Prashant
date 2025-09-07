@@ -24,8 +24,8 @@ def main(config):
     log_dir = os.path.join(config.work_dir, 'log')
     checkpoint_dir = os.path.join(config.work_dir, 'checkpoints')
     resume_model = os.path.join(checkpoint_dir, 'latest.pth')
-    best_dice  = checkpoint.get('best_dice', best_dice)
-    best_epoch = checkpoint.get('best_epoch', best_epoch)
+    # best_dice  = checkpoint.get('best_dice', best_dice)
+    # best_epoch = checkpoint.get('best_epoch', best_epoch)
     outputs = os.path.join(config.work_dir, 'outputs')
     if not os.path.exists(checkpoint_dir):
         os.makedirs(checkpoint_dir)
@@ -142,6 +142,9 @@ def main(config):
         saved_epoch = checkpoint['epoch']
         start_epoch += saved_epoch
         min_loss, min_epoch, loss = checkpoint['min_loss'], checkpoint['min_epoch'], checkpoint['loss']
+
+        best_dice  = checkpoint.get('best_dice', best_dice)
+        best_epoch = checkpoint.get('best_epoch', best_epoch)
 
         log_info = f'resuming model from {resume_model}. resume_epoch: {saved_epoch}, min_loss: {min_loss:.4f}, min_epoch: {min_epoch}, loss: {loss:.4f}'
         logger.info(log_info)
