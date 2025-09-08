@@ -198,11 +198,13 @@ def main(config):
         # --- Save best based on Val Dice (higher is better) ---
         if val_dice > best_dice:
             logger.info(f"\tSaving best model: Dice {best_dice:.4f} -> {val_dice:.4f}")
+            print(f"\tSaving best model: Dice {best_dice:.4f} -> {val_dice:.4f}")
             best_dice  = val_dice
             best_epoch = epoch
             torch.save(model.state_dict(), os.path.join(checkpoint_dir, 'best.pth'))
         else:
             logger.info(f"\tDice did not improve: curr {val_dice:.4f}, best {best_dice:.4f} @ epoch {best_epoch}")
+            print(f"\tDice did not improve: curr {val_dice:.4f}, best {best_dice:.4f} @ epoch {best_epoch}")
 
 
         # torch.save(
@@ -234,8 +236,10 @@ def main(config):
         # --- Early stopping on Dice ---
         early_stopping_count = epoch - best_epoch
         logger.info(f"\tEarly stopping patience: {early_stopping_count}/{dice_patience}")
+        print(f"\tEarly stopping patience: {early_stopping_count}/{dice_patience}")
         if early_stopping_count >= dice_patience:
             logger.info('\tEarly stopping triggered (Dice)!')
+            print('\tEarly stopping triggered (Dice)!')
             break
 
     if os.path.exists(os.path.join(checkpoint_dir, 'best.pth')):
