@@ -4,7 +4,7 @@ import torch
 from torch.cuda.amp import autocast as autocast
 from sklearn.metrics import confusion_matrix
 from utils import save_imgs
-
+import time
 
 def train_one_epoch(train_loader,
                     model,
@@ -126,6 +126,24 @@ def val_one_epoch(test_loader,
     return float(np.mean(loss_list)), float(f1_or_dsc)
 
 
+class AverageMeter(object):
+    """Computes and stores the average and current value"""
+
+    def __init__(self):
+        self.reset()
+
+    def reset(self):
+        self.val = 0
+        self.avg = 0
+        self.sum = 0
+        self.count = 0
+
+    def update(self, val, n=1):
+        self.val = val
+        self.sum += val * n
+        self.count += n
+        self.avg = self.sum / self.count
+
 
 def test_one_epoch(test_loader,
                     model,
@@ -138,12 +156,17 @@ def test_one_epoch(test_loader,
     preds = []
     gts = []
     loss_list = []
+    gpu_time_meter = AverageMeter()
     with torch.no_grad():
         for i, data in enumerate(tqdm(test_loader)):
             img, msk = data
             img, msk = img.cuda(non_blocking=True).float(), msk.cuda(non_blocking=True).float()
 
+            start_time = time.time()
             out = model(img)
+            end_time = time.time()
+            gpu_time_meter.update(end_time - start_time, img.size(0))
+
             loss = criterion(out, msk)
 
             loss_list.append(loss.item())
@@ -177,6 +200,7 @@ def test_one_epoch(test_loader,
             logger.info(log_info)
         log_info = f'test of best model, loss: {np.mean(loss_list):.4f},miou: {miou}, f1_or_dsc: {f1_or_dsc}, accuracy: {accuracy}, \
                 specificity: {specificity}, sensitivity: {sensitivity}, confusion_matrix: {confusion}'
+        log_info += f', GPU_time: {gpu_time_meter.avg:.4f} sec per image'
         print(log_info)
         logger.info(log_info)
 
