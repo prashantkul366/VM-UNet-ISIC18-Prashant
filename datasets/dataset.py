@@ -15,7 +15,8 @@ from PIL import Image
 
 class NPY_datasets(Dataset):
     def __init__(self, path_Data, config, train=True):
-        super(NPY_datasets, self)
+        # super(NPY_datasets, self)
+        super().__init__()
         if train:
             images_list = sorted(os.listdir(path_Data+'train/images/'))
             masks_list = sorted(os.listdir(path_Data+'train/masks/'))
@@ -47,7 +48,8 @@ class NPY_datasets(Dataset):
     
 class NPY_datasets_test(Dataset):
     def __init__(self, path_Data, config, test=True):
-        super(NPY_datasets, self)
+        # super(NPY_datasets, self)
+        super().__init__()
         if test:
             images_list = sorted(os.listdir(path_Data+'test/images/'))
             masks_list = sorted(os.listdir(path_Data+'test/masks/'))
