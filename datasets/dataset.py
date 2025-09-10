@@ -12,6 +12,22 @@ from torch.utils.data import Dataset
 from scipy import ndimage
 from PIL import Image
 
+##################################
+
+IMG_EXTS = {'.png', '.jpg', '.jpeg', '.bmp', '.tif', '.tiff'}
+MSK_EXTS = IMG_EXTS
+
+def _files_by_stem(dirpath, exts):
+    files = []
+    for f in os.listdir(dirpath):
+        if f.startswith('.'):
+            continue
+        stem, ext = os.path.splitext(f)
+        if ext.lower() in exts:
+            files.append((stem, os.path.join(dirpath, f)))
+    return {stem: path for stem, path in files}
+
+####################################
 
 class NPY_datasets(Dataset):
     def __init__(self, path_Data, config, train=True):
@@ -47,27 +63,40 @@ class NPY_datasets(Dataset):
         return len(self.data)
     
 class NPY_datasets_test(Dataset):
+    # def __init__(self, path_Data, config, test=True):
+    #     # super(NPY_datasets, self)
+    #     super().__init__()
+    #     if test:
+    #         images_list = sorted(os.listdir(path_Data+'test/images/'))
+    #         masks_list = sorted(os.listdir(path_Data+'test/masks/'))
+    #         self.data = []
+    #         for i in range(len(images_list)):
+    #             img_path = path_Data+'test/images/' + images_list[i]
+    #             mask_path = path_Data+'test/masks/' + masks_list[i]
+    #             self.data.append([img_path, mask_path])
+    #         self.transformer = config.train_transformer
+    #     else:
+    #         images_list = sorted(os.listdir(path_Data+'val/images/'))
+    #         masks_list = sorted(os.listdir(path_Data+'val/masks/'))
+    #         self.data = []
+    #         for i in range(len(images_list)):
+    #             img_path = path_Data+'val/images/' + images_list[i]
+    #             mask_path = path_Data+'val/masks/' + masks_list[i]
+    #             self.data.append([img_path, mask_path])
+    #         self.transformer = config.test_transformer
+
     def __init__(self, path_Data, config, test=True):
-        # super(NPY_datasets, self)
         super().__init__()
-        if test:
-            images_list = sorted(os.listdir(path_Data+'test/images/'))
-            masks_list = sorted(os.listdir(path_Data+'test/masks/'))
-            self.data = []
-            for i in range(len(images_list)):
-                img_path = path_Data+'test/images/' + images_list[i]
-                mask_path = path_Data+'test/masks/' + masks_list[i]
-                self.data.append([img_path, mask_path])
-            self.transformer = config.train_transformer
-        else:
-            images_list = sorted(os.listdir(path_Data+'val/images/'))
-            masks_list = sorted(os.listdir(path_Data+'val/masks/'))
-            self.data = []
-            for i in range(len(images_list)):
-                img_path = path_Data+'val/images/' + images_list[i]
-                mask_path = path_Data+'val/masks/' + masks_list[i]
-                self.data.append([img_path, mask_path])
-            self.transformer = config.test_transformer
+        split = 'test' if test else 'val'
+        img_dir = os.path.join(path_Data, split, 'images')
+        msk_dir = os.path.join(path_Data, split, 'masks')
+        img_map = _files_by_stem(img_dir, IMG_EXTS)
+        msk_map = _files_by_stem(msk_dir, MSK_EXTS)
+        common = sorted(set(img_map) & set(msk_map))
+        if not common:
+            raise RuntimeError(f"No matched image–mask pairs in {img_dir} and {msk_dir}.")
+        self.data = [(img_map[s], msk_map[s]) for s in common]
+        self.transformer = config.test_transformer
         
     def __getitem__(self, indx):
         img_path, msk_path = self.data[indx]
