@@ -1,7 +1,7 @@
 import torch
 from torch.utils.data import DataLoader
 import timm
-from datasets.dataset import NPY_datasets
+from datasets.dataset import NPY_datasets, NPY_datasets_test
 from tensorboardX import SummaryWriter
 from models.vmunet.vmunet import VMUNet
 
@@ -154,100 +154,113 @@ def main(config):
 
     step = 0
     print('#----------Training----------#')
-    for epoch in range(start_epoch, config.epochs + 1):
+    # for epoch in range(start_epoch, config.epochs + 1):
 
-        torch.cuda.empty_cache()
-        print(f'Epoch {epoch}/{config.epochs}:')
-        step = train_one_epoch(
-            train_loader,
-            model,
-            criterion,
-            optimizer,
-            scheduler,
-            epoch,
-            step,
-            logger,
-            config,
-            writer
-        )
+    #     torch.cuda.empty_cache()
+    #     print(f'Epoch {epoch}/{config.epochs}:')
+    #     step = train_one_epoch(
+    #         train_loader,
+    #         model,
+    #         criterion,
+    #         optimizer,
+    #         scheduler,
+    #         epoch,
+    #         step,
+    #         logger,
+    #         config,
+    #         writer
+    #     )
 
-        # loss = val_one_epoch(
-        #         val_loader,
-        #         model,
-        #         criterion,
-        #         epoch,
-        #         logger,
-        #         config
-        #     )
+    #     # loss = val_one_epoch(
+    #     #         val_loader,
+    #     #         model,
+    #     #         criterion,
+    #     #         epoch,
+    #     #         logger,
+    #     #         config
+    #     #     )
 
-        val_loss, val_dice = val_one_epoch(
-                    val_loader,
-                    model,
-                    criterion,
-                    epoch,
-                    logger,
-                    config
-                )
-
-
-        # if loss < min_loss:
-        #     torch.save(model.state_dict(), os.path.join(checkpoint_dir, 'best.pth'))
-        #     min_loss = loss
-        #     min_epoch = epoch
-
-        # --- Save best based on Val Dice (higher is better) ---
-        if val_dice > best_dice:
-            logger.info(f"\tSaving best model: Dice {best_dice:.4f} -> {val_dice:.4f}")
-            print(f"\tSaving best model: Dice {best_dice:.4f} -> {val_dice:.4f}")
-            best_dice  = val_dice
-            best_epoch = epoch
-            torch.save(model.state_dict(), os.path.join(checkpoint_dir, 'best.pth'))
-        else:
-            logger.info(f"\tDice did not improve: curr {val_dice:.4f}, best {best_dice:.4f} @ epoch {best_epoch}")
-            print(f"\tDice did not improve: curr {val_dice:.4f}, best {best_dice:.4f} @ epoch {best_epoch}")
+    #     val_loss, val_dice = val_one_epoch(
+    #                 val_loader,
+    #                 model,
+    #                 criterion,
+    #                 epoch,
+    #                 logger,
+    #                 config
+    #             )
 
 
-        # torch.save(
-        #     {
-        #         'epoch': epoch,
-        #         'min_loss': min_loss,
-        #         'min_epoch': min_epoch,
-        #         'loss': loss,
-        #         'model_state_dict': model.state_dict(),
-        #         'optimizer_state_dict': optimizer.state_dict(),
-        #         'scheduler_state_dict': scheduler.state_dict(),
-        #     }, os.path.join(checkpoint_dir, 'latest.pth')) 
+    #     # if loss < min_loss:
+    #     #     torch.save(model.state_dict(), os.path.join(checkpoint_dir, 'best.pth'))
+    #     #     min_loss = loss
+    #     #     min_epoch = epoch
 
-        torch.save(
-                {
-                    'epoch': epoch,
-                    'min_loss': min_loss,
-                    'min_epoch': min_epoch,
-                    'loss': val_loss,                       # store the current val loss
-                    'best_dice': best_dice,                 # NEW: store best Dice so far
-                    'best_epoch': best_epoch,               # NEW: store epoch of best Dice
-                    'model_state_dict': model.state_dict(),
-                    'optimizer_state_dict': optimizer.state_dict(),
-                    'scheduler_state_dict': scheduler.state_dict(),
-                },
-                os.path.join(checkpoint_dir, 'latest.pth')
-            )
+    #     # --- Save best based on Val Dice (higher is better) ---
+    #     if val_dice > best_dice:
+    #         logger.info(f"\tSaving best model: Dice {best_dice:.4f} -> {val_dice:.4f}")
+    #         print(f"\tSaving best model: Dice {best_dice:.4f} -> {val_dice:.4f}")
+    #         best_dice  = val_dice
+    #         best_epoch = epoch
+    #         torch.save(model.state_dict(), os.path.join(checkpoint_dir, 'best.pth'))
+    #     else:
+    #         logger.info(f"\tDice did not improve: curr {val_dice:.4f}, best {best_dice:.4f} @ epoch {best_epoch}")
+    #         print(f"\tDice did not improve: curr {val_dice:.4f}, best {best_dice:.4f} @ epoch {best_epoch}")
 
-        # --- Early stopping on Dice ---
-        early_stopping_count = epoch - best_epoch
-        logger.info(f"\tEarly stopping patience: {early_stopping_count}/{dice_patience}")
-        print(f"\tEarly stopping patience: {early_stopping_count}/{dice_patience}")
-        if early_stopping_count >= dice_patience:
-            logger.info('\tEarly stopping triggered (Dice)!')
-            print('\tEarly stopping triggered (Dice)!')
-            break
+
+    #     # torch.save(
+    #     #     {
+    #     #         'epoch': epoch,
+    #     #         'min_loss': min_loss,
+    #     #         'min_epoch': min_epoch,
+    #     #         'loss': loss,
+    #     #         'model_state_dict': model.state_dict(),
+    #     #         'optimizer_state_dict': optimizer.state_dict(),
+    #     #         'scheduler_state_dict': scheduler.state_dict(),
+    #     #     }, os.path.join(checkpoint_dir, 'latest.pth')) 
+
+    #     torch.save(
+    #             {
+    #                 'epoch': epoch,
+    #                 'min_loss': min_loss,
+    #                 'min_epoch': min_epoch,
+    #                 'loss': val_loss,                       # store the current val loss
+    #                 'best_dice': best_dice,                 # NEW: store best Dice so far
+    #                 'best_epoch': best_epoch,               # NEW: store epoch of best Dice
+    #                 'model_state_dict': model.state_dict(),
+    #                 'optimizer_state_dict': optimizer.state_dict(),
+    #                 'scheduler_state_dict': scheduler.state_dict(),
+    #             },
+    #             os.path.join(checkpoint_dir, 'latest.pth')
+    #         )
+
+    #     # --- Early stopping on Dice ---
+    #     early_stopping_count = epoch - best_epoch
+    #     logger.info(f"\tEarly stopping patience: {early_stopping_count}/{dice_patience}")
+    #     print(f"\tEarly stopping patience: {early_stopping_count}/{dice_patience}")
+    #     if early_stopping_count >= dice_patience:
+    #         logger.info('\tEarly stopping triggered (Dice)!')
+    #         print('\tEarly stopping triggered (Dice)!')
+    #         break
+
+
 
     if os.path.exists(os.path.join(checkpoint_dir, 'best.pth')):
         print('#----------Testing----------#')
+
+        ######################################
+        test_dataset = NPY_datasets_test(config.data_path, config, test=True)
+        test_loader = DataLoader(test_dataset,
+                                batch_size=1,
+                                shuffle=False,
+                                pin_memory=True, 
+                                num_workers=config.num_workers,
+                                drop_last=True)
+        
+        ######################################
         best_weight = torch.load(config.work_dir + 'checkpoints/best.pth', map_location=torch.device('cpu'))
         model.load_state_dict(best_weight)
         loss = test_one_epoch(
-                val_loader,
+                test_loader,
                 model,
                 criterion,
                 logger,
