@@ -244,36 +244,68 @@ def main(config):
 
 
 
-    if os.path.exists(os.path.join(checkpoint_dir, 'best.pth')):
-        print('#----------Testing----------#')
+    # if os.path.exists(os.path.join(checkpoint_dir, 'best.pth')):
+    #     print('#----------Testing----------#')
 
-        ######################################
-        test_dataset = NPY_datasets_test(config.data_path, config, test=True)
-        test_loader = DataLoader(test_dataset,
-                                batch_size=1,
-                                shuffle=False,
-                                pin_memory=True, 
-                                num_workers=config.num_workers,
-                                drop_last=True)
+    #     ######################################
+    #     test_dataset = NPY_datasets_test(config.data_path, config, test=True)
+    #     test_loader = DataLoader(test_dataset,
+    #                             batch_size=1,
+    #                             shuffle=False,
+    #                             pin_memory=True, 
+    #                             num_workers=config.num_workers,
+    #                             drop_last=True)
         
-        ######################################
-        best_weight = torch.load(config.work_dir + 'checkpoints/best.pth', map_location=torch.device('cpu'))
-        model.load_state_dict(best_weight)
-        loss = test_one_epoch(
-                test_loader,
-                model,
-                criterion,
-                logger,
-                config,
-            )
-        # os.rename(
-        #     os.path.join(checkpoint_dir, 'best.pth'),
-        #     os.path.join(checkpoint_dir, f'best-epoch{min_epoch}-loss{min_loss:.4f}.pth')
-        # ) 
-        os.rename(
-            os.path.join(checkpoint_dir, 'best.pth'),
-            os.path.join(checkpoint_dir, f'best-epoch{best_epoch}-dice{best_dice:.4f}.pth')
+    #     ######################################
+    #     best_weight = torch.load(config.work_dir + 'checkpoints/best.pth', map_location=torch.device('cpu'))
+    #     model.load_state_dict(best_weight)
+    #     loss = test_one_epoch(
+    #             test_loader,
+    #             model,
+    #             criterion,
+    #             logger,
+    #             config,
+    #         )
+    #     # os.rename(
+    #     #     os.path.join(checkpoint_dir, 'best.pth'),
+    #     #     os.path.join(checkpoint_dir, f'best-epoch{min_epoch}-loss{min_loss:.4f}.pth')
+    #     # ) 
+    #     os.rename(
+    #         os.path.join(checkpoint_dir, 'best.pth'),
+    #         os.path.join(checkpoint_dir, f'best-epoch{best_epoch}-dice{best_dice:.4f}.pth')
+    #     )
+
+    
+    print('#----------Testing----------#')
+
+    ######################################
+    test_dataset = NPY_datasets_test(config.data_path, config, test=True)
+    test_loader = DataLoader(test_dataset,
+                            batch_size=1,
+                            shuffle=False,
+                            pin_memory=True, 
+                            num_workers=config.num_workers,
+                            drop_last=True)
+    
+    ######################################
+    checkpt_path = '/content/drive/MyDrive/Prashant/VM-UNet-ISIC18-Prashant/results/vmunet_isic18_Sunday_07_September_2025_10h_54m_23s/checkpoints/best.pth'
+    best_weight = torch.load(checkpt_path, map_location=torch.device('cpu'))
+    model.load_state_dict(best_weight)
+    loss = test_one_epoch(
+            test_loader,
+            model,
+            criterion,
+            logger,
+            config,
         )
+    # os.rename(
+    #     os.path.join(checkpoint_dir, 'best.pth'),
+    #     os.path.join(checkpoint_dir, f'best-epoch{min_epoch}-loss{min_loss:.4f}.pth')
+    # ) 
+    os.rename(
+        os.path.join(checkpoint_dir, 'best.pth'),
+        os.path.join(checkpoint_dir, f'best-epoch{best_epoch}-dice{best_dice:.4f}.pth')
+    )
      
 
 
