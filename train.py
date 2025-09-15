@@ -302,10 +302,10 @@ def main(config):
     #     os.path.join(checkpoint_dir, 'best.pth'),
     #     os.path.join(checkpoint_dir, f'best-epoch{min_epoch}-loss{min_loss:.4f}.pth')
     # ) 
-    os.rename(
-        os.path.join(checkpoint_dir, 'best.pth'),
-        os.path.join(checkpoint_dir, f'best-epoch{best_epoch}-dice{best_dice:.4f}.pth')
-    )
+    # os.rename(
+    #     os.path.join(checkpoint_dir, 'best.pth'),
+    #     os.path.join(checkpoint_dir, f'best-epoch{best_epoch}-dice{best_dice:.4f}.pth')
+    # )
      
 
 
