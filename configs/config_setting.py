@@ -21,7 +21,8 @@ class setting_config:
 
     datasets = 'isic18' 
     if datasets == 'isic18':
-        data_path = '/content/drive/MyDrive/Amit-Paper3/UNeXt-pytorch/inputs/isic2/'
+        # data_path = '/content/drive/MyDrive/Amit-Paper3/UNeXt-pytorch/inputs/isic2/'
+        data_path = '/content/drive/MyDrive/Akanksha/polyp_pvt/Polyp-PVT/data/Kvasir-SEG'
     elif datasets == 'isic17':
         data_path = './data/isic2017/'
     else:
@@ -57,8 +58,11 @@ class setting_config:
     # best_ckpt_path = 'PATH_TO_YOUR_BEST_CKPT'
     # img_save_path = 'PATH_TO_SAVE_IMAGES'
     # for test-only runs (set only_test_and_save_figs = True)
-    best_ckpt_path = '/content/drive/MyDrive/Prashant/VM-UNet-ISIC18-Prashant/results/vmunet_isic18_/checkpoints/best.pth'
-    img_save_path  = '/content/drive/MyDrive/Prashant/VM-UNet-ISIC18-Prashant/inference/vmunet_isic18/'
+    # best_ckpt_path = '/content/drive/MyDrive/Prashant/VM-UNet-ISIC18-Prashant/results/vmunet_isic18_/checkpoints/best.pth'
+    # img_save_path  = '/content/drive/MyDrive/Prashant/VM-UNet-ISIC18-Prashant/inference/vmunet_isic18/'
+
+    best_ckpt_path = '/content/drive/MyDrive/Akanksha/hVM-Unet_Kvasir/'
+    img_save_path  = '/content/drive/MyDrive/Akanksha/hVM-Unet_Kvasir/'
 
 
     train_transformer = transforms.Compose([
