@@ -22,7 +22,7 @@ class setting_config:
     datasets = 'isic18' 
     if datasets == 'isic18':
         # data_path = '/content/drive/MyDrive/Amit-Paper3/UNeXt-pytorch/inputs/isic2/'
-        data_path = '/content/drive/MyDrive/Akanksha/polyp_pvt/Polyp-PVT/data/Kvasir-SEG'
+        data_path = '/content/drive/MyDrive/Akanksha/polyp_pvt/Polyp-PVT/data/Kvasir-SEG/'
     elif datasets == 'isic17':
         data_path = './data/isic2017/'
     else:
