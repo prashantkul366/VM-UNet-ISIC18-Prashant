@@ -25,7 +25,7 @@ class setting_config:
         # data_path = '/content/drive/MyDrive/Akanksha/polyp_pvt/Polyp-PVT/data/Kvasir-SEG/'
         # data_path = '/content/drive/MyDrive/Akanksha/PFNET_2_2_8_2/PFNet/data/CVC-ColonDB/'
         # data_path = '/content/drive/MyDrive/Akanksha/PFNET_2_2_8_2/PFNet/data/CVC-ClinicDB/'
-        data_path = '/content/drive/MyDrive/Prashant/research_datasets/Dataset_BUSI_80_20'
+        data_path = '/content/drive/MyDrive/Prashant/research_datasets/Dataset_BUSI_80_20/'
     elif datasets == 'isic17':
         data_path = './data/isic2017/'
     else:
