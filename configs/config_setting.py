@@ -24,7 +24,8 @@ class setting_config:
         # data_path = '/content/drive/MyDrive/Amit-Paper3/UNeXt-pytorch/inputs/isic2/'
         # data_path = '/content/drive/MyDrive/Akanksha/polyp_pvt/Polyp-PVT/data/Kvasir-SEG/'
         # data_path = '/content/drive/MyDrive/Akanksha/PFNET_2_2_8_2/PFNet/data/CVC-ColonDB/'
-        data_path = '/content/drive/MyDrive/Akanksha/PFNET_2_2_8_2/PFNet/data/CVC-ClinicDB/'
+        # data_path = '/content/drive/MyDrive/Akanksha/PFNET_2_2_8_2/PFNet/data/CVC-ClinicDB/'
+        data_path = '/content/drive/MyDrive/Prashant/research_datasets/Dataset_BUSI_80_20'
     elif datasets == 'isic17':
         data_path = './data/isic2017/'
     else:
@@ -63,8 +64,9 @@ class setting_config:
     # best_ckpt_path = '/content/drive/MyDrive/Prashant/VM-UNet-ISIC18-Prashant/results/vmunet_isic18_/checkpoints/best.pth'
     # img_save_path  = '/content/drive/MyDrive/Prashant/VM-UNet-ISIC18-Prashant/inference/vmunet_isic18/'
 
-    best_ckpt_path = '/content/drive/MyDrive/Akanksha/hVM-Unet_Kvasir/'
-    img_save_path  = '/content/drive/MyDrive/Akanksha/hVM-Unet_Kvasir/'
+    best_ckpt_path = '/content/drive/MyDrive/Prashant/ACC-UNet-Unext/BUSI_80-20/vmunet'
+    img_save_path  = '/content/drive/MyDrive/Prashant/ACC-UNet-Unext/BUSI_80-20/vmunet'
+
 
 
     train_transformer = transforms.Compose([

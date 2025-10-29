@@ -44,13 +44,13 @@ class NPY_datasets(Dataset):
                 self.data.append([img_path, mask_path])
             self.transformer = config.train_transformer
         else:
-            print(f"Path : {os.listdir(path_Data+'val/images/')}")
-            images_list = sorted(os.listdir(path_Data+'val/images/'))
-            masks_list = sorted(os.listdir(path_Data+'val/masks/'))
+            print(f"Path : {os.listdir(path_Data+'test/images/')}")
+            images_list = sorted(os.listdir(path_Data+'test/images/'))
+            masks_list = sorted(os.listdir(path_Data+'test/masks/'))
             self.data = []
             for i in range(len(images_list)):
-                img_path = path_Data+'val/images/' + images_list[i]
-                mask_path = path_Data+'val/masks/' + masks_list[i]
+                img_path = path_Data+'test/images/' + images_list[i]
+                mask_path = path_Data+'test/masks/' + masks_list[i]
                 self.data.append([img_path, mask_path])
             self.transformer = config.test_transformer
         
