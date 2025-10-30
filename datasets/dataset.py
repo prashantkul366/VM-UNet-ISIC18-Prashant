@@ -34,7 +34,8 @@ class NPY_datasets(Dataset):
         # super(NPY_datasets, self)
         super().__init__()
         if train:
-            print(f"Path : {os.listdir(path_Data+'train/images/')}")
+            print(f"Path : {path_Data}+'train")
+            # print(f"Path : {os.listdir(path_Data+'train/images/')}")
             images_list = sorted(os.listdir(path_Data+'train/images/'))
             masks_list = sorted(os.listdir(path_Data+'train/masks/'))
             self.data = []
@@ -44,7 +45,8 @@ class NPY_datasets(Dataset):
                 self.data.append([img_path, mask_path])
             self.transformer = config.train_transformer
         else:
-            print(f"Path : {os.listdir(path_Data+'test/images/')}")
+            # print(f"Path : {os.listdir(path_Data+'test/images/')}")
+            print(f"Path : {path_Data}+'test")
             images_list = sorted(os.listdir(path_Data+'test/images/'))
             masks_list = sorted(os.listdir(path_Data+'test/masks/'))
             self.data = []
