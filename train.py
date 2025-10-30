@@ -22,6 +22,7 @@ def main(config):
     print('#----------Creating logger----------#')
     sys.path.append(config.work_dir + '/')
     log_dir = os.path.join(config.work_dir, 'log')
+    print(f"Log Dir:{log_dir}")
     checkpoint_dir = os.path.join(config.work_dir, 'checkpoints')
     resume_model = os.path.join(checkpoint_dir, 'latest.pth')
     # best_dice  = checkpoint.get('best_dice', best_dice)
@@ -53,6 +54,7 @@ def main(config):
 
 
     print('#----------Preparing dataset----------#')
+    print(f"Data Path: {config.data_path}")
     train_dataset = NPY_datasets(config.data_path, config, train=True)
     train_loader = DataLoader(train_dataset,
                                 batch_size=config.batch_size, 
@@ -116,11 +118,22 @@ def main(config):
 
 
     if config.only_test_and_save_figs:
-        checkpoint = torch.load(config.best_ckpt_path, map_location=torch.device('cpu'))
+        # checkpoint = torch.load(config.best_ckpt_path, map_location=torch.device('cpu'))
+        # model.load_state_dict(checkpoint)
+        # config.work_dir = config.img_save_path
+        # if not os.path.exists(config.work_dir + 'outputs/'):
+        #     os.makedirs(config.work_dir + 'outputs/')
+
+        best_ckpt = config.best_ckpt_path or os.path.join(config.work_dir, 'checkpoints', 'best.pth')
+        img_dir   = config.img_save_path or os.path.join(config.work_dir, 'outputs')
+
+        checkpoint = torch.load(best_ckpt, map_location=torch.device('cpu'))
         model.load_state_dict(checkpoint)
-        config.work_dir = config.img_save_path
-        if not os.path.exists(config.work_dir + 'outputs/'):
-            os.makedirs(config.work_dir + 'outputs/')
+
+        if not os.path.exists(img_dir):
+            os.makedirs(img_dir)
+        config.work_dir = img_dir 
+
         loss = test_one_epoch(
                 val_loader,
                 model,
