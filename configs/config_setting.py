@@ -19,8 +19,8 @@ class setting_config:
         'load_ckpt_path': './pre_trained_weights/vmamba_small_e238_ema.pth',
     }
 
-    # datasets = 'ISIC2018'
-    datasets = 'BUSI'
+    datasets = 'ISIC2018'
+    # datasets = 'BUSI'
     # datasets = 'CVC-ClinicDB_80_20'
     
     if datasets == 'ISIC2018':
