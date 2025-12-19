@@ -76,7 +76,7 @@ def main(config):
     
     val_split = "val"
     val_dataset = Dataset(
-                    root=config.data_path, split="test",
+                    root=config.data_path, split="val",
                     images_dir="images", masks_dir="masks",
                     train_augs=False, target_size=(H, W)
                 )
