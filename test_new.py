@@ -28,7 +28,11 @@ def main(config):
     checkpoint_dir = os.path.join(config.work_dir, 'checkpoints')
     # resume_model = os.path.join('')
     # resume_model = '/content/drive/MyDrive/Prashant/H-vmunet_prashant_ISIC/results/H_vmunet_ISIC2018_Thursday_04_December_2025_06h_08m_08s/checkpoints/best.pth'
-    resume_model = '/content/drive/MyDrive/Prashant/H-vmunet_prashant_ISIC/results/H_vmunet_ISIC2018_Thursday_04_December_2025_06h_08m_08s/checkpoints/best.pth'
+    # resume_model = '/content/drive/MyDrive/Prashant/H-vmunet_prashant_ISIC/results/H_vmunet_ISIC2018_Thursday_04_December_2025_06h_08m_08s/checkpoints/best.pth'
+    # resume_model = '/content/drive/MyDrive/Prashant/H-vmunet_prashant_ISIC/results/H_vmunet_BUSI_Friday_05_December_2025_07h_20m_32s/checkpoints/best.pth'
+
+    # resume_model = '/content/drive/MyDrive/Prashant/H-vmunet_prashant_ISIC/results/H_vmunet_ISIC2018_Thursday_04_December_2025_06h_08m_08s/checkpoints/best.pth'
+    resume_model = '/content/drive/MyDrive/Prashant/VM-Unet-ISIC18-Prashant/results/vmunet_CVC-ClinicDB_80_20_Thursday_18_December_2025_11h_33m_09s/checkpoints/best.pth'
     # resume_model = '/content/drive/MyDrive/Prashant/H-vmunet_prashant_ISIC/results/H_vmunet_BUSI_Friday_05_December_2025_07h_20m_32s/checkpoints/best.pth'
     outputs = os.path.join(config.work_dir, 'outputs')
     if not os.path.exists(checkpoint_dir):
