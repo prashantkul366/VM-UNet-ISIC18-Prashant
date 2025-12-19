@@ -241,6 +241,6 @@ class Dataset(Dataset):
 
         img_name = os.path.basename(img_path).split('.')[0]
 
-        # return img_t, msk_t , img_name
-        return img_t, msk_t
+        return img_t, msk_t , img_name
+        # return img_t, msk_t
 
