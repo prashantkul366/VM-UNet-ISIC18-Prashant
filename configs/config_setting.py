@@ -20,8 +20,8 @@ class setting_config:
     }
 
     # datasets = 'ISIC2018'
-    # datasets = 'BUSI'
-    datasets = 'CVC-ClinicDB_80_20'
+    datasets = 'BUSI'
+    # datasets = 'CVC-ClinicDB_80_20'
     
     if datasets == 'ISIC2018':
         data_path = '/content/drive/MyDrive/Amit-Paper3/UNeXt-pytorch/inputs/isic2'
